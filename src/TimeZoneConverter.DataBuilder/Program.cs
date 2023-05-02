@@ -46,10 +46,16 @@ internal static class Program
 
             // Apply override mappings for zones not yet in the CLDR trunk we pulled in
             mapping.Remove("Mountain Standard Time (Mexico),001,America/Chihuahua");
-            mapping.Add("Mountain Standard Time (Mexico),001,America/Mazatlan");
+            if (!mapping.Contains("Mountain Standard Time (Mexico),001,America/Mazatlan"))
+            {
+                mapping.Add("Mountain Standard Time (Mexico),001,America/Mazatlan");
+            }
 
             mapping.Remove("Mountain Standard Time (Mexico),MX,America/Chihuahua America/Mazatlan");
-            mapping.Add("Mountain Standard Time (Mexico),MX,America/Mazatlan");
+            if (!mapping.Contains("Mountain Standard Time (Mexico),MX,America/Mazatlan"))
+            {
+                mapping.Add("Mountain Standard Time (Mexico),MX,America/Mazatlan");
+            }
 
             mapping.Remove("Central Standard Time (Mexico),MX,America/Mexico_City America/Bahia_Banderas America/Merida America/Monterrey");
             if (!mapping.Contains("\"Central Standard Time (Mexico),MX,America/Mexico_City America/Bahia_Banderas America/Merida America/Monterrey America/Chihuahua\""))
@@ -58,7 +64,10 @@ internal static class Program
             }
 
             mapping.Remove("Mountain Standard Time,MX,America/Ojinaga");
-            mapping.Add("Mountain Standard Time,MX,America/Ciudad_Juarez");
+            if (!mapping.Contains("Mountain Standard Time,MX,America/Ciudad_Juarez"))
+            {
+                mapping.Add("Mountain Standard Time,MX,America/Ciudad_Juarez");
+            }
 
             mapping.Remove("Central Standard Time,MX,America/Matamoros");
             if (!mapping.Contains("Central Standard Time,MX,America/Matamoros America/Ojinaga"))
@@ -156,7 +165,7 @@ internal static class Program
             // Create the IANA map entries
             foreach (var ianaZone in ianaZones)
             {
-                if (!ianaMap.ContainsKey(ianaZone))
+                if (!ianaMap.ContainsKey(ianaZone) && !string.IsNullOrEmpty(ianaZone))
                 {
                     ianaMap.Add(ianaZone, windowsZone);
                 }

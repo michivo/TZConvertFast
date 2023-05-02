@@ -100,7 +100,6 @@ public static class IanaMap
         { "America/Merida","Central Standard Time (Mexico)" },
         { "America/Monterrey","Central Standard Time (Mexico)" },
         { "America/Chihuahua","Central Standard Time (Mexico)" },
-        { "","Central Standard Time (Mexico)" },
         { "America/Chicago","Central Standard Time" },
         { "America/Winnipeg","Central Standard Time" },
         { "America/Rainy_River","Central Standard Time" },

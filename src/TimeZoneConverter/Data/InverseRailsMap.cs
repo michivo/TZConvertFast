@@ -620,11 +620,6 @@ public static class InverseRailsMap
                 "Guadalajara", 
                 "Mexico City", 
          }},
-        { "",
-            new List<string> { 
-                "Guadalajara", 
-                "Mexico City", 
-         }},
         { "America/Indiana/Knox",
             new List<string> { 
                 "Central Time (US & Canada)", 
