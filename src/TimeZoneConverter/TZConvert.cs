@@ -17,7 +17,7 @@ public static class TZConvert
     private static readonly IReadOnlyDictionary<string, string> Links = Data.Links.Mappings;
     private static readonly Dictionary<string, TimeZoneInfo> SystemTimeZones;
     
-    private static readonly IReadOnlyDictionary<string, IReadOnlyList<string>> IanaTerritoryZones = Data.SimilarIanaZones.Mappings;
+    private static readonly IReadOnlyDictionary<string, IReadOnlyList<string>> IanaTerritoryZones = Data.IanaTerritoryZones.Mappings;
 
     static TZConvert()
     {

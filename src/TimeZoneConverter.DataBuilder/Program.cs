@@ -52,13 +52,19 @@ internal static class Program
             mapping.Add("Mountain Standard Time (Mexico),MX,America/Mazatlan");
 
             mapping.Remove("Central Standard Time (Mexico),MX,America/Mexico_City America/Bahia_Banderas America/Merida America/Monterrey");
-            mapping.Add("Central Standard Time (Mexico),MX,America/Mexico_City America/Bahia_Banderas America/Merida America/Monterrey America/Chihuahua");
+            if (!mapping.Contains("\"Central Standard Time (Mexico),MX,America/Mexico_City America/Bahia_Banderas America/Merida America/Monterrey America/Chihuahua\""))
+            {
+                mapping.Add("Central Standard Time (Mexico),MX,America/Mexico_City America/Bahia_Banderas America/Merida America/Monterrey America/Chihuahua");
+            }
 
             mapping.Remove("Mountain Standard Time,MX,America/Ojinaga");
             mapping.Add("Mountain Standard Time,MX,America/Ciudad_Juarez");
 
             mapping.Remove("Central Standard Time,MX,America/Matamoros");
-            mapping.Add("Central Standard Time,MX,America/Matamoros America/Ojinaga");
+            if (!mapping.Contains("Central Standard Time,MX,America/Matamoros America/Ojinaga"))
+            {
+                mapping.Add("Central Standard Time,MX,America/Matamoros America/Ojinaga");
+            }
 
             // Add missing Rails mappings where they make sense
             railsMapping.Remove("Arizona,America/Phoenix");
@@ -289,7 +295,7 @@ internal static class Program
         WriteCodeFile(dataPath, windowsMap, "WindowsMap");
         WriteCodeFile(dataPath, links, "Links");
         WriteCodeFile(dataPath, railsMap, "RailsMap");
-        WriteCodeFile(dataPath, similarIanaZones, "SimilarIanaZones");
+        WriteCodeFile(dataPath, ianaTerritoryZones, "IanaTerritoryZones");
         WriteCodeFile(dataPath, inverseRailsMap, "InverseRailsMap");
     }
 
