@@ -1,4 +1,4 @@
-﻿{
+{
   AD: [
     Europe/Andorra
   ],
@@ -176,8 +176,7 @@
     America/Toronto,
     America/Vancouver,
     America/Whitehorse,
-    America/Winnipeg,
-    America/Yellowknife
+    America/Winnipeg
   ],
   CC: [
     Indian/Cocos
