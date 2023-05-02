@@ -10,20 +10,17 @@ namespace TimeZoneConverter;
 public static class TZConvert
 {
     private static readonly bool IsWindows = RuntimeInformation.IsOSPlatform(OSPlatform.Windows);
-    private static readonly Dictionary<string, string> IanaMap = new(StringComparer.OrdinalIgnoreCase);
-    private static readonly Dictionary<string, string> WindowsMap = new(StringComparer.OrdinalIgnoreCase);
-    private static readonly Dictionary<string, string> RailsMap = new(StringComparer.OrdinalIgnoreCase);
-    private static readonly Dictionary<string, IList<string>> InverseRailsMap = new(StringComparer.OrdinalIgnoreCase);
-    private static readonly Dictionary<string, string> Links = new(StringComparer.OrdinalIgnoreCase);
+    private static readonly IReadOnlyDictionary<string, string> IanaMap = Data.IanaMap.Mappings;
+    private static readonly IReadOnlyDictionary<string, string> WindowsMap = Data.WindowsMap.Mappings;
+    private static readonly IReadOnlyDictionary<string, string> RailsMap = Data.RailsMap.Mappings;
+    private static readonly IReadOnlyDictionary<string, IReadOnlyList<string>> InverseRailsMap = Data.InverseRailsMap.Mappings;
+    private static readonly IReadOnlyDictionary<string, string> Links = Data.Links.Mappings;
     private static readonly Dictionary<string, TimeZoneInfo> SystemTimeZones;
     
-    private static readonly IDictionary<string, IList<string>> IanaTerritoryZones =
-        new Dictionary<string, IList<string>>(StringComparer.OrdinalIgnoreCase);
+    private static readonly IReadOnlyDictionary<string, IReadOnlyList<string>> IanaTerritoryZones = Data.SimilarIanaZones.Mappings;
 
     static TZConvert()
     {
-        DataLoader.Populate(IanaMap, WindowsMap, RailsMap, InverseRailsMap, Links, IanaTerritoryZones);
-
         var knownIanaTimeZoneNames = new HashSet<string>(IanaMap.Select(x => x.Key));
         var knownWindowsTimeZoneIds = new HashSet<string>(WindowsMap.Keys.Select(x => x.Split('|')[1]).Distinct());
         var knownRailsTimeZoneNames = new HashSet<string>(RailsMap.Select(x => x.Key));
@@ -286,7 +283,7 @@ public static class TZConvert
                 {
                     var goldenResolved = ResolveLink(goldenIanaId);
                     var specificResolved = ResolveLink(ianaId!);
-                    if (goldenResolved != specificResolved && !WindowsMap.ContainsValue(specificResolved))
+                    if (goldenResolved != specificResolved && !WindowsMap.Values.Contains(specificResolved))
                     {
                         ianaTimeZoneName = specificResolved;
                     }
@@ -376,7 +373,7 @@ public static class TZConvert
     /// Thrown if the input string was not recognized or has no equivalent Rails
     /// zone.
     /// </exception>
-    public static IList<string> IanaToRails(string ianaTimeZoneName)
+    public static IReadOnlyList<string> IanaToRails(string ianaTimeZoneName)
     {
         if (TryIanaToRails(ianaTimeZoneName, out var railsTimeZoneNames))
         {
@@ -393,7 +390,7 @@ public static class TZConvert
     /// <param name="ianaTimeZoneName">The IANA time zone name to convert.</param>
     /// <param name="railsTimeZoneNames">One or more equivalent Rails time zone names.</param>
     /// <returns><c>true</c> if successful, <c>false</c> otherwise.</returns>
-    public static bool TryIanaToRails(string ianaTimeZoneName, out IList<string> railsTimeZoneNames)
+    public static bool TryIanaToRails(string ianaTimeZoneName, out IReadOnlyList<string> railsTimeZoneNames)
     {
         // try directly first
         if (InverseRailsMap.TryGetValue(ianaTimeZoneName, out railsTimeZoneNames!))
@@ -495,7 +492,7 @@ public static class TZConvert
     /// Thrown if the input string was not recognized or has no equivalent Rails
     /// zone.
     /// </exception>
-    public static IList<string> WindowsToRails(string windowsTimeZoneId, string territoryCode = "001")
+    public static IReadOnlyList<string> WindowsToRails(string windowsTimeZoneId, string territoryCode = "001")
     {
         if (TryWindowsToRails(windowsTimeZoneId, territoryCode, out var railsTimeZoneNames))
         {
@@ -513,7 +510,7 @@ public static class TZConvert
     /// <param name="windowsTimeZoneId">The Windows time zone ID to convert.</param>
     /// <param name="railsTimeZoneNames">One or more equivalent Rails time zone names.</param>
     /// <returns><c>true</c> if successful, <c>false</c> otherwise.</returns>
-    public static bool TryWindowsToRails(string windowsTimeZoneId, out IList<string> railsTimeZoneNames)
+    public static bool TryWindowsToRails(string windowsTimeZoneId, out IReadOnlyList<string> railsTimeZoneNames)
     {
         return TryWindowsToRails(windowsTimeZoneId, "001", out railsTimeZoneNames);
     }
@@ -529,7 +526,7 @@ public static class TZConvert
     /// <param name="railsTimeZoneNames">One or more equivalent Rails time zone names.</param>
     /// <returns><c>true</c> if successful, <c>false</c> otherwise.</returns>
     public static bool TryWindowsToRails(string windowsTimeZoneId, string territoryCode,
-        out IList<string> railsTimeZoneNames)
+        out IReadOnlyList<string> railsTimeZoneNames)
     {
         if (TryWindowsToIana(windowsTimeZoneId, territoryCode, out var ianaTimeZoneName) &&
             TryIanaToRails(ianaTimeZoneName, out railsTimeZoneNames))
